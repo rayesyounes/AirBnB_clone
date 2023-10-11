@@ -63,3 +63,4 @@ class FileStorage:
 						cls = class_mapping[class_name]
 						obj = cls(**value)
 						FileStorage.__objects[key] = obj
+
