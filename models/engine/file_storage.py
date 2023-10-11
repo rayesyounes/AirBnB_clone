@@ -41,7 +41,12 @@ class FileStorage:
 		from models.user import User
 		class_mapping = {
 			"BaseModel": BaseModel,
-			"User": User
+			"User": User,
+                        "State": State,
+                        "City": City,
+                        "Amenity": Amenity,
+                        "Place": Place,
+                        "Review": Review
 		}
 		if os.path.exists(FileStorage.__file_path):
 			with open(FileStorage.__file_path) as read_file:
