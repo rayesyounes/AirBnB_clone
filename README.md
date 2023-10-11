@@ -79,3 +79,4 @@ To ensure the proper functionality of the console, run the unit tests using the 
 ## Authors
 
 -   [Rayes Younes / Spoutnikrs](https://github.com/rayesyounes)
+-   [El Ghazi Siham / Siham23](https://github.com/SihamEl23)
