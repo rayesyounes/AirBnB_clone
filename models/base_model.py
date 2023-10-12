@@ -1,54 +1,46 @@
 #!/usr/bin/python3
-"""
-class BaseModel that defines all common
-attributes/methods for other classes
-take care of the initialization, serialization and
-deserialization of your future instances
-"""
 from uuid import uuid4
 from datetime import datetime
 from models import storage
 
-
 class BaseModel:
-    """
-    class BaseModel that defines all common
-    attributes/methods for other classes
-    """
+	"""
+	Defines all common attributes/methods for other classes
+	"""
+	def __init__(self, *args, **kwargs):
+		if len(kwargs) != 0:
+			for key, value in kwargs.items():
+				if key == '__class__':
+					continue
+				if key in ['created_at', 'updated_at']:
+					value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+				setattr(self, key, value)
+		else:
+			self.id = str(uuid4())
+			self.created_at = datetime.now()
+			self.updated_at = self.created_at
+			storage.new(self)
+	
+	def __str__(self):
+		"""
+		Returns the instance of BaseModel
+		"""
+		return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+	
+	def save(self):
+		"""
+		Updates updated_at with the current datetime
+		"""
+		self.updated_at = datetime.now()
+		storage.save()
+	
+	def to_dict(self):
+		"""
+		Returns a dictionary containing all keys/values of __dict__
+		"""
+		instance_dict = self.__dict__.copy()
+		instance_dict['__class__'] = self.__class__.__name__
+		instance_dict['created_at'] = self.created_at.isoformat()
+		instance_dict['updated_at'] = self.updated_at.isoformat()
+		return instance_dict
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Initialization of BaseModel Class"""
-        #if len(kwargs) == 0:
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-        #else:
-        if kwargs:
-            for key, value in kwargs.items():
-                if key in ["created_at", "updated_at"]: #TODO:mandatory atribut
-                    setattr(self, key, datetime.strptime(
-                        value, "%Y-%m-%dT%H:%M:%S.%f"))
-                elif key != "__class__":
-                    setattr(self, key, value)
-        else:
-            storage.new(self)
-        
-    def __str__(self) -> str:
-        """Returns the string representation of an instance"""
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
-
-    def save(self) -> None:
-        """update the public instance updated_at"""
-        self.updated_at = datetime.now()
-        storage.save() #TODO:updated_att will not be saved
-        
-
-    def to_dict(self) -> dict:
-        """returns the dictionary representation of the instance"""
-        todict = dict(self.__dict__)
-        todict["__class__"] = self.__class__.__name__
-        if not isinstance(todict["created_at"], str):
-            todict["created_at"] = todict["created_at"].isoformat()
-        if not isinstance(todict["updated_at"], str):
-            todict["updated_at"] = todict["updated_at"].isoformat()
-        return todict
