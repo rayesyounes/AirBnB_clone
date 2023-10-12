@@ -22,6 +22,3 @@ print(type(my_new_model.created_at))
 
 print("--")
 print(my_model is my_new_model)
-print("\t{}: ({}) - {}".format(key, type(my_model_json[key]),
-                                   my_model_json[key]))
-
