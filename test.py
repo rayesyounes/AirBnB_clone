@@ -1,6 +1,5 @@
 import cmd
 
-
 class MyCmd(cmd.Cmd):
     intro = "Welcome to My Command Interpreter. Type 'help' to list commands."
     prompt = "(MyCmd) "
@@ -27,7 +26,6 @@ class MyCmd(cmd.Cmd):
     def emptyline(self):
         """Do nothing when an empty line is entered."""
         pass
-
 
 if __name__ == "__main__":
     my_cmd = MyCmd()
