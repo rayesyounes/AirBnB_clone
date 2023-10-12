@@ -54,6 +54,7 @@ class FileStorage:
             "Review": Review
         }
         if os.path.exists(FileStorage.__file_path):
+            data = {}
             with open(FileStorage.__file_path) as read_file:
                 data = json.load(read_file)
                 FileStorage.__objects = {}
@@ -63,4 +64,3 @@ class FileStorage:
                         cls = class_mapping[class_name]
                         obj = cls(**value)
                         FileStorage.__objects[key] = obj
-
