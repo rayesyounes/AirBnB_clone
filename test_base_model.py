@@ -12,8 +12,3 @@ print(my_model_json)
 print("JSON of my_model:")
 for key in my_model_json.keys():
     print("\t{}: ({}) - {}".format(key, type(my_model_json[key]), my_model_json[key]))
-<<<<<<< HEAD
-=======
-    print("\t{}: ({}) - {}".format(key, type(my_model_json[key]), my_model_json[key]))
-
->>>>>>> 593d2beb849cf0a603bd168fd22e210b3e8134cb
