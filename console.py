@@ -23,20 +23,20 @@ class HBNBCommand(cmd.Cmd):
     }
 
     def do_quit(self, arg):
-        """Quit command to exit the program"""
+        """Exit the program"""
         return True
 
     def do_EOF(self, arg):
-        """Exit the program on EOF (Ctrl+D)"""
+        """Exit the program on End Of File"""
         print()
         return True
 
     def handle_empty_line(self, arg):
-        """Eliminates empty lines"""
+        """Handles empty lines by doing nothing"""
         return False
 
     def do_create(self, arg):
-        """Create a new instance of BaseModel, save it, and print the ID"""
+        """Create a new instance of a model"""
         args = arg.split()
         if not arg:
             print("** class name missing **")
@@ -62,6 +62,8 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = args[0]
         instance_id = args[1]
+        if instance_id[0] == instance_id[-1] == '"':
+            instance_id = instance_id[1:-1]
         key = "{}.{}".format(class_name, instance_id)
         obj = storage.all()
         if key in obj:
@@ -92,7 +94,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_all(self, arg):
-        """Print all instances or instances of a specific class"""
+        """Print all instances or all instances of a specific class"""
         if not arg:
             objects = [str(obj) for obj in storage.all().values()]
             print(objects)
