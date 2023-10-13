@@ -2,9 +2,10 @@
 import json
 import os
 
+
 class FileStorage:
     """
-    Serializes and instances to a JSON file
+    Serializes instances to a JSON file
     and deserializes JSON file to instances
     """
     __file_path = "file.json"
@@ -64,4 +65,3 @@ class FileStorage:
                         cls = class_mapping[class_name]
                         obj = cls(**value)
                         FileStorage.__objects[key] = obj
-

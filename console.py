@@ -10,7 +10,10 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 
+
 class HBNBCommand(cmd.Cmd):
+    """The console class"""
+
     prompt = "(hbnb) "
     class_name = {
         "BaseModel": BaseModel,
@@ -33,7 +36,7 @@ class HBNBCommand(cmd.Cmd):
 
     def handle_empty_line(self, arg):
         """Handles empty lines by doing nothing"""
-        return False
+        pass
 
     def do_create(self, arg):
         """Create a new instance of a model"""
