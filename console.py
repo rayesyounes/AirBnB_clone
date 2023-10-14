@@ -133,7 +133,6 @@ class HBNBCommand(cmd.Cmd):
         class_name = args[0]
         instance_id = args[1]
 
-        # Handle instance IDs enclosed in double quotes
         if instance_id[0] == instance_id[-1] == '"':
             instance_id = instance_id[1:-1]
         key = "{}.{}".format(class_name, instance_id)
@@ -144,7 +143,6 @@ class HBNBCommand(cmd.Cmd):
         attribute_name = args[2]
         attribute_value = args[3]
 
-        # Handle attribute values enclosed in double quotes
         if attribute_value[0] == attribute_value[-1] == '"':
             attribute_value = attribute_value[1:-1]
         try:
