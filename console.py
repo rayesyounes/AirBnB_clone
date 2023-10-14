@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-""" Doc Here """
+""" Command line interpreter """
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -15,6 +16,7 @@ class HBNBCommand(cmd.Cmd):
     """The console class"""
 
     prompt = "(hbnb) "
+
     class_name = {
         "BaseModel": BaseModel,
         "User": User,
@@ -26,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
     }
 
     def do_quit(self, arg):
-        """Exit the program"""
+        """Quit command to exit the program"""
         return True
 
     def do_EOF(self, arg):
@@ -39,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Create a new instance of a model"""
+        """Create a new instance of BaseModel, save it, and print the ID"""
         args = arg.split()
         if not arg:
             print("** class name missing **")
@@ -47,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
         if args[0] not in self.class_name:
             print("** class doesn't exist **")
             return
-        new_instance = self.class_name[arg]()
+        new_instance = self.class_name[args[0]]()
         new_instance.save()
         print(new_instance.id)
 
@@ -88,6 +90,8 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = args[0]
         instance_id = args[1]
+        if instance_id[0] == instance_id[-1] == '"':
+            instance_id = instance_id[1:-1]
         key = "{}.{}".format(class_name, instance_id)
         obj = storage.all()
         if key in obj:
@@ -97,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_all(self, arg):
-        """Print all instances or all instances of a specific class"""
+        """Print all instances or instances of a specific class"""
         if not arg:
             objects = [str(obj) for obj in storage.all().values()]
             print(objects)
@@ -107,10 +111,8 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             class_name = args[0]
-            filtered_objects = [
-                str(obj) for key, obj in storage.all().items()
-                if key.startswith(class_name + ".")
-            ]
+            filtered_objects = [str(obj) for key, obj in storage.all().items()
+                                if key.startswith(class_name + ".")]
             print(filtered_objects)
 
     def do_update(self, arg):
@@ -130,6 +132,10 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = args[0]
         instance_id = args[1]
+
+        # Handle instance IDs enclosed in double quotes
+        if instance_id[0] == instance_id[-1] == '"':
+            instance_id = instance_id[1:-1]
         key = "{}.{}".format(class_name, instance_id)
         obj = storage.all()
         if key not in obj:
@@ -137,6 +143,8 @@ class HBNBCommand(cmd.Cmd):
             return
         attribute_name = args[2]
         attribute_value = args[3]
+
+        # Handle attribute values enclosed in double quotes
         if attribute_value[0] == attribute_value[-1] == '"':
             attribute_value = attribute_value[1:-1]
         try:
@@ -148,6 +156,43 @@ class HBNBCommand(cmd.Cmd):
                 pass
         setattr(obj[key], attribute_name, attribute_value)
         storage.save()
+
+    def do_count(self, arg):
+        """
+        Counts the number of instances of a specific class
+        """
+        class_name = arg.strip()
+        if class_name not in self.class_name:
+            print("** class doesn't exist **")
+            return
+
+        count = 0
+        for obj in storage.all().values():
+            if class_name == obj.__class__.__name__:
+                count += 1
+        print(count)
+
+    def default(self, arg):
+        """Default behavior for cmd module when input is invalid"""
+        commands = {
+            "all": self.do_all,
+            "count": self.do_count,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update
+        }
+        args = re.search(r"\.", arg)
+        if args is None:
+            print("*** Invalid command: {} ***".format(arg))
+            return False
+        else:
+            com = [arg[:args.start()], arg[args.end():]]
+            args = re.search(r"\((.*?)\)", com[1])
+            if args is not None:
+                command = [com[1][:args.start()], args.group(1)]
+                if command[0] in commands.keys():
+                    res = "{} {}".format(com[0], command[1])
+                    return commands[command[0]](res)
 
 
 if __name__ == '__main__':
