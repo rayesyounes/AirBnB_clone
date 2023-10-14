@@ -1,4 +1,4 @@
-AirBnB Clone Console
+# AirBnB Clone Console
 
 Welcome to the AirBnB Clone Console! This is the first step towards building the AirBnB clone project, a full web application that mimics some functionalities of the popular accommodation rental platform, Airbnb.
 
