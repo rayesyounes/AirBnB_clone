@@ -2,10 +2,9 @@ header {
     background-color: white;
     height: 70px;
     width: 100%;
+
+    color: white;
     border-bottom: 1px solid #CCCCCC;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
 }
 
 header .logo {
@@ -14,5 +13,5 @@ header .logo {
     background-repeat: no-repeat;
     width: 175px;
     height: 100%;
-    margin-left: 20px;
+    margin-right: auto;
 }
